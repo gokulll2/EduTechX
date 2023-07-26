@@ -3,6 +3,8 @@ const OTP = require("../models/OTP");
 const otpGenerator =require("otp-generator");
 const Profile = require("../models/Profile")
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 //SendOTP
 exports.sendOTP = async (req,res)=>{
     try{
@@ -149,8 +151,48 @@ exports.signUp = async(req,res)=>{
 //login
 exports.Login = async(req,res)=>{
     try{
-         
+        //get data from req body
+         const {email , password} = req.body;
+         //validate the data
+         if(!email || !password)
+         {
+            return res.status(403).json({
+                success:false,
+                message:"All fields are required",
+            })
+         }
+        //user check exist or not
+        const user = await User.findOne({email}).populate("additionalDetails") //no need of populate 
+        if(!user)
+        {
+            return res.status(401).json({
+                success:false,
+                message:"User is not registered",
+            })
+        }
+        //generate token after macthing the passwords
+        const payload = {
+            email:user.email,
+            id:user._id,
+            role:user.role
+        }
+        if(await bcrypt.compare(password,user.password))
+        {
+            const token = jwt.sign(payload,process.env.JWT_SECRET,{
+                expiresIn:"2h",
+            });
+            user.token = token;
+            user.password = undefined;
+            //create cookie and send response
+            const options = 
+            req.cookie = ("token",token,options).status(200).json({
+                success:true,
+                token,
+                user,
+                message:"Logged in successfully",
+            })
+        }
     } catch(error){
-        
+
     }
 }
