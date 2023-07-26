@@ -174,7 +174,7 @@ exports.Login = async(req,res)=>{
         const payload = {
             email:user.email,
             id:user._id,
-            role:user.role
+            accountType:user.accountType,
         }
         if(await bcrypt.compare(password,user.password))
         {
@@ -184,7 +184,10 @@ exports.Login = async(req,res)=>{
             user.token = token;
             user.password = undefined;
             //create cookie and send response
-            const options = 
+            const options = {
+                expires: new Date(Date.now() + 3*24*60*60*1000),
+                httpOnly:true,
+            }
             req.cookie = ("token",token,options).status(200).json({
                 success:true,
                 token,
@@ -192,6 +195,30 @@ exports.Login = async(req,res)=>{
                 message:"Logged in successfully",
             })
         }
+        else{
+            return res.status(401).json({
+                success:false,
+                message:"Password is incorrect",
+            })
+        }
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Login failure,Please try again"
+        })
+    }
+}
+//ChangePassword
+exports.changePassword = async(req,res)=>{
+    //get Data from req ki body 
+    //get oldPassword, newPassword , confirmPassword
+    //Validation
+    //Update Password in DB
+    //Send Mail - Password Updated
+    //return Response
+    try{
+
     } catch(error){
 
     }
