@@ -1,6 +1,7 @@
 const User = require("../models/User");
 // const jwt = require("jsonwebtoken");
 const mailSender = require("../utils/mailSender");
+const bcrypt = require("bcrypt");
 
 //resetPasswordToken
 exports.resetPasswordToken = async(req,res)=>{
@@ -40,7 +41,60 @@ exports.resetPasswordToken = async(req,res)=>{
     } catch(err)
     {
         console.log(error);
-        
+        return res.status(400).json({
+            success:false,
+            message:"Something went wrong while sending reset pwd mail",
+        })
     }
 }
 //resetPassword
+exports.resetPassword = async(req,res)=>{
+    try{
+        //Data fetch
+        const{password , confirmPassword , token} = req.body;
+        //Validation
+        if(password!==confirmPassword)
+        {
+            return res.status(401).json({
+                success:false,
+                message:"Password not matching"
+            })
+        }
+        //get Userdetails from db using token
+        const userDetails = await User.findOne({token:token});
+        //if no entry - Ivalid Token
+        if(!userDetails)
+        {
+            return res.status(401).json({
+                success:false,
+                message:"Token is invalid",
+            })
+        }
+        //Token time check
+        if(userDetails.resetPasswordExpires < Date.now())
+        {
+            return res.json({
+                success:false,
+                message:"Token is expired, please regenerate your token",
+            })
+        }
+        //hash pwd
+        const hashedPassword = await bcrypt.hash(password,10);
+        //Password update
+        await User.findOneAndUpdate(
+            {token:token},
+            {password:hashedPassword},
+            {new:true}
+        )
+        return res.status(200).json({
+            success:true,
+            message:"Password reset successfully",
+        })
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:"Something went wrong while sending reset pwd mail"
+        })
+    }
+}
