@@ -20,6 +20,12 @@ const userSchema = new mongoose.schema({
         type:String,
         required:true,
     },
+    token:{
+        type:String,
+    },
+    resetPasswordExpires:{
+        type:Date,
+    },
     accountType:{
         type:String,
         enum:["Admin","Student","Instructor"],
