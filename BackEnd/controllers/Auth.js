@@ -162,7 +162,7 @@ exports.Login = async(req,res)=>{
             })
          }
         //user check exist or not
-        const user = await User.findOne({email}).populate("additionalDetails") //no need of populate 
+        const user = await User.findOne({email}) //no need of populate 
         if(!user)
         {
             return res.status(401).json({
@@ -218,7 +218,7 @@ exports.changePassword = async(req,res)=>{
     //Send Mail - Password Updated
     //return Response
     try{
-
+        
     } catch(error){
 
     }
