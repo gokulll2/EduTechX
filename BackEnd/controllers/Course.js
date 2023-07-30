@@ -25,6 +25,7 @@ exports.createCourse = async(req,res)=>{
         const userID = req.user.id
         const instructorDetails = await User.findById(userID);
         console.log("Instructor Details : " , instructorDetails);
+        //TODO : verify if the userID and instructorDetails.id are same or not 
         if(!instructorDetails)
         {
             return res.status(404).json({
@@ -74,7 +75,7 @@ exports.createCourse = async(req,res)=>{
         })
     } catch(err)
     {
-        console.log(error);
+        console.log(err);
         return res.status(500).json({
             success:false,
             message:"Failed to create Course",
