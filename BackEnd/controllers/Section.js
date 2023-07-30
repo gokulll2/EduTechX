@@ -42,3 +42,54 @@ exports.createSection = async (req,res) =>{
         })
     }
 }
+exports.updateTheSection = async (req,res)=>{
+    try{
+        //data inout
+        const {sectionName , sectionId} = req.body;
+        //data validation
+        if(!sectionId || !sectionName)
+        {
+            return res.status(400).json({
+                success:false,
+                message:"Missing Properties",
+            })
+        }
+        //update the data
+        const updateSection = await Section.findByIdAndUpdate(sectionName , {sectionName} , {new:true});
+
+        //return response
+        return res.status(200).json({
+            success:true,
+            message:"Section Updated Successfully",
+            updateSection
+        })
+    } catch(error)
+    {
+        return res.status(500).json({
+            success:false,
+            message:"Unable to update section, please try again",
+            Error:error.message,
+        })
+    }
+}
+exports.deleteSection = async (req,res)=>{
+    try{
+        //get ID - assuming that we are sending ID in params
+        const {sectionId} = req.params
+        //Use find id and delete
+        await Section.findByIdAndDelete({sectionId});
+        //return res
+        return res.status(200).json({
+            success:true,
+            message:"Section Deleted Successfully",
+        })
+         
+    } catch(error)
+    {
+        return res.status(500).json({
+            success:false,
+            message:"Unable to delete section, please try again",
+            Error:error.message,
+        })
+    }
+}
