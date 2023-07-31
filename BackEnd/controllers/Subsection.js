@@ -38,8 +38,22 @@ exports.SubSection = async(req,res)=>{
             videoUrl:uploadDetails.secure_url,
         })
         //Update Section with this subsection , means Push Subsection id to that section
-        
+        const updatedSection =  await SubSection.findByIdAndUpdate(
+            {_id:sectionId},
+            {
+                $push:{
+                    subSection:subSectionDetails._id,
+                }
+            },
+            {new:true},
+        ) //Log updated section here after adding populate query
+
         //return res
+        return res.status(200).json({
+            success:true,
+            message:"Sub Section Created Successfully",
+            updatedSection,
+        })
     } catch(error)
     {
         console.log(error);
@@ -50,3 +64,5 @@ exports.SubSection = async(req,res)=>{
         })
     }
 }
+//Updated Subsection
+//Deleted Subsection
