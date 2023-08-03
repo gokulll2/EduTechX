@@ -65,4 +65,11 @@ exports.SubSection = async(req,res)=>{
     }
 }
 //Updated Subsection
+exports.updateSubSection = async(req,res)=>{
+    try{
+
+    } catch(error){
+
+    }
+}
 //Deleted Subsection

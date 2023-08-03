@@ -9,7 +9,7 @@ exports.resetPasswordToken = async(req,res)=>{
         //get Email from req body
         const email = req.body.email;
         //check user for the email , email validation
-        const user = await User.findOnde({email:email});
+        const user = await User.findOne({email:email});
         if(!user)
         {
             return res.status(401).json({
