@@ -81,3 +81,66 @@ exports.capturePayment = async (req,res)=>{
             });
          }      
 }
+
+//Verify signature of Razorpay and server
+exports.verifySignature = async(req,res)=>{
+    const webhookSecret = "12345678";
+    const signature = req.headers["x-razorpay-signature"];
+
+   const shahsum =  crypto.createHmac("sha256",webhookSecret);
+   shahsum.update(JSON.stringify(req.body)) 
+   const digest = shahsum.digest("hex") 
+   if(signature === digest)
+   {
+    console.log("Payment is Authorized")
+    const {courseId , userID} = req.body.payload.payment.entity.notes;
+    try{
+        //fulfil the action
+
+        //find the course and enroll the student in it
+        const enrolledCourse = await Course.findOneAndUpdate(
+                                {_id:courseId},
+                                {$push:{studentsEnrolled:userID}},
+                                {new:true},
+        )
+        if(!enrolledCourse)
+        {
+            return res.status(500).json({
+                success:false,
+                message:"Course not found",
+            })
+        }
+        //if found, find the student and add the course details in it
+        const enrolledStudent = await User.findOneAndUpdate(
+                                {_id:userID},
+                                {$push:{courses:courseId}},
+                                {new:true},
+        )
+        console.log(enrolledStudent);
+        
+        //mail send krni ab
+        const emailResponse = await mailSender(
+                      enrolledStudent.email,
+                      "Congratulations from EduTechX",
+                      "Congratulations, You are OnBoard with your new course"
+        )
+        console.log(emailResponse)
+        return res.status(200).json({
+            success:true,
+            message:"Signature verified and Course added",
+        })
+    } catch(err)
+    {
+        return res.status(401).json({
+            success:false,
+            message:err.message,
+        })
+    }
+   }
+   else{
+     return res.status(400).json({
+
+     })
+   }
+}
+
