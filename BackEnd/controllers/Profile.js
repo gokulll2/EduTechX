@@ -58,11 +58,38 @@ exports.deleteAccount = async(req,res)=>{
         }
         //delete the profile first
         await Profile.findByIdAndDelete({_id:userDetails.additionalDetails})
+        //Todo:Unenroll the students from all the enrolled Courses
         //Delete the user
-       await User.findByIdAndDelete
+       await User.findByIdAndDelete({_id:id});
         //return response
+        return res.status(200).json({
+            success:true,
+            message:"User Deleted Successfully",
+        })
     } catch(error)
     {
-
+        return res.status(500).json({
+            success:false,
+            message:"User cannot be deleted successfully",
+        })
+    }
+}
+exports.getAllUserDetails = async(req,res)=>{
+    try{
+        //get the user id
+        const id = req.user.id
+        //validation and get user details
+         const userDetails = User.findById(id).populate("additionalDetails").exec();
+        //return response
+        return res.status(200).json({
+            success:true,
+            message:"User data fetched successfully"
+        })
+    } catch(error)
+    {
+        return res.status(500).json({
+            success:false,
+            message:"Failed in getting the User's details"
+        })
     }
 }
