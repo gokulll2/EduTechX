@@ -1,6 +1,7 @@
 const RatingAndReview = require("../models/RatingAndReview");
 const User = require("../models/User");
 const Course = require("../models/Course");
+const { default: mongoose } = require("mongoose");
 
 //create Rating 
 exports.createRating = async(req,res)=>{
@@ -68,13 +69,60 @@ exports.createRating = async(req,res)=>{
 exports.getAverageRating = async (req,res)=>{
     try{
         //getCourseId
-        const courseId = req.body.courseid
+        const courseId = req.body.courseId
         //Calculate the avg rating
+
+        const result = await RatingAndReview.aggregate([
+                    {
+                        $match:{
+                            course:new mongoose.Schema.Types.ObjectId(courseId),
+                        },
+
+                    },
+                    {
+                        $group:{
+                            _id:null,
+                            averageRating:{$avg : "$rating"},
+                        }
+                    }
+                ])
         //return res
+        if(result.length>0)
+        {
+            return res.status(200).json({
+                success:true,
+                averageRating:result[0].averageRating,
+            })
+        }
+        //if no rating/review exist
+        return res.status(200).json({
+            success:true,
+            message:"Average rating is 0 ,no ratings given till now",
+            averageRating:0,
+        })
 
     } catch(err)
     {
-
+        console.log(err);
+        return res.status(500).json({
+            success:false,
+            message:err.message,
+        })
     }
 }
 //getAllRatings
+exports.getAllRatings = async (req,res)=>{
+    try{
+        const allReviews = await RatingAndReview.find({
+                           
+                                 }).sort({rating:"desc"})
+                                 .populate({})
+    } catch(error)
+    {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:error.message,
+        })
+    }
+}
