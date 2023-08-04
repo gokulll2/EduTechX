@@ -108,3 +108,50 @@ exports.showAllCourses = async (req,res)=>{
         })
     }
 }
+//get Course Details
+exports.getCourseDetails = async (req,res)=>{
+    try{
+        //get ID
+        const {courseId} = req.body;
+        //Find the course Details
+        const courseDetails = await Course.find(
+                              {_id:courseId}
+        ).populate(
+            {
+                path:"instructor",
+                populate:{
+                    path:"additionalDetails",
+                }
+            }
+          )
+          .populate("category")
+          .populate("ratingAndreviews")
+          .populate({
+            path:"courseContent",
+            populate:{
+                path:"subSection",
+            }
+          })
+          .exec();
+          //VAlidation
+          if(!courseDetails)
+          {
+            return res.status(400).json({
+                success:false,
+                message:`Could not find the course with thw ${courseId}`,
+            })
+          }
+          return res.tatus(200).json({
+            success:true,
+            message:"Course details fetched successfully",
+            data:courseDetails,
+          })
+    }catch(err)
+    {
+        console.log(err);
+        return res.status(400).json({
+            success:false,
+            message:err.message,
+        })
+    }
+}
