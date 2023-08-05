@@ -1,4 +1,5 @@
-
+const Category = require("../models/Category");
+const Course = require("../models/Course");
 
 exports.createCategory = async(req,res)=>{
     try{
@@ -48,3 +49,46 @@ exports.showAllCategories = async (req,res) =>{
     }
 }
 
+exports.categoryPageDetails = async (req,res)=>{
+    try{
+        //getCategoryID
+        const {categoryId} = req.body;
+        //get Courses for specified category ID
+        const selectedCategory = await Category.findById({categoryId})
+                                         .populate("courses")
+                                         .exec();
+        //Validation
+        if(!selectedCategory)
+        {
+            return res.status(404).json({
+                success:false,
+                message:"Data Not Found"
+            })
+        }
+        //get Courses for diff categories
+        const diffCategories = await Category.find({
+                               _id:{$ne:categoryId},
+                                  })
+                                  .populate("courses")
+                                  .exec(); 
+        //get top 10 selling courses
+        //HW
+        //return response
+        return res.status(200).json({
+            success:true,
+            message:"Done",
+            data:{
+                selectedCategory,
+                diffCategories
+            },
+        })
+
+    } catch(err)
+    {
+        console.log(err);
+        return res.status(404).json({
+            success:false,
+            message:err.message
+        })
+    }
+}
