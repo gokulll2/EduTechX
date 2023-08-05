@@ -11,4 +11,4 @@ const categorySchema = new mongoose.Schema({
             ref:"Course",
         }],
 })
-model.exports = mongoose.model("Category",categorySchema);
+module.exports = mongoose.model("Category",categorySchema);
