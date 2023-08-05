@@ -1,7 +1,6 @@
-const Tag = require("../models/tags");
 
-//create tag handler
-exports.createTag = async(req,res)=>{
+
+exports.createCategory = async(req,res)=>{
     try{
         //fetch Data
         const{name,description}=req.body;
@@ -14,15 +13,15 @@ exports.createTag = async(req,res)=>{
             })
         } 
         //create entry in DB
-        const tagDetails = await Tag.create({
+        const categoryDetails = await Category.create({
             name:name,
             description:description,
         });
-        console.log(tagDetails);
+        console.log(categoryDetails);
         //return response
         return res.status(200).json({
             success:true,
-            message:"Tag created successfully",
+            message:"Category created successfully",
         })
     } catch(error){
         return res.status(500).json({
@@ -33,13 +32,13 @@ exports.createTag = async(req,res)=>{
 }
 //get all tags
 
-exports.showAllTags = async (req,res) =>{
+exports.showAllCategories = async (req,res) =>{
     try{
-        const alltags = await Tag.find({} , {name:true , description:true}) //it means name and desc are must
+        const allCategories = await Category.find({} , {name:true , description:true}) //it means name and desc are must
         return res.status(200).json({
             success:true,
-            message:"All tags returned successfully",
-            alltags
+            message:"All Categories returned successfully",
+            allCategories
         })
     } catch(err){
         return res.status(500).json({
@@ -48,3 +47,4 @@ exports.showAllTags = async (req,res) =>{
         })
     }
 }
+
