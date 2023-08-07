@@ -69,7 +69,23 @@ exports.updateSubSection = async(req,res)=>{
     try{
 
     } catch(error){
-
+        console.log(error)
+        return res.status(403).json({
+            success:false,
+            message:error.message,
+        })
     }
 }
 //Deleted Subsection
+exports.deleteSubSection = async(req,res) =>{
+    try{
+
+    } catch(err)
+    {
+        console.log(err);
+        return res.status(403).json({
+            success:false,
+            message:err.message,
+        })
+    }
+}
