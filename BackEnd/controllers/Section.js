@@ -24,8 +24,13 @@ exports.createSection = async (req,res) =>{
                                             }
                                           },
                                           {new:true},
-                                                            )
-        //HW: use populate to replace section and sub-sections both in the updatedCourseDetails
+                                ).populate({
+                                    path:"courseContent",
+                                    populate:{
+                                        path: "subSection",
+                                    },
+                                })
+                                .exec();
         //Return Response
         return res.status(200).jsoN({
             success:true,
@@ -42,7 +47,7 @@ exports.createSection = async (req,res) =>{
         })
     }
 }
-exports.updateTheSection = async (req,res)=>{
+exports.updateSection = async (req,res)=>{
     try{
         //data inout
         const {sectionName , sectionId} = req.body;
@@ -77,7 +82,7 @@ exports.deleteSection = async (req,res)=>{
         //get ID - assuming that we are sending ID in params
         const {sectionId} = req.params
         //Use find id and delete
-        await Section.findByIdAndDelete({sectionId});
+        await Section.findByIdAndDelete(sectionId);
         //TODO : do we need to delete the entry from course schema too?
         //return res
         return res.status(200).json({
@@ -87,6 +92,7 @@ exports.deleteSection = async (req,res)=>{
          
     } catch(error)
     {
+        console.log("Error deleting section",error);
         return res.status(500).json({
             success:false,
             message:"Unable to delete section, please try again",
