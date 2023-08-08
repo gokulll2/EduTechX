@@ -7,13 +7,13 @@ const { default: mongoose } = require("mongoose");
 exports.createRating = async(req,res)=>{
     try{ 
         //get UserID
-        const userID = req.user.id;
+        const userId = req.user.id;
         //fetch data from req body
         const{rating , review , courseId} = req.body;
         //check if user is enrolled or not 
         const courseDetails = await Course.findOne(
                                  {_id:courseId ,
-                                 studentsEnrolled:{$elematch:{$eq : userID}}
+                                 studentsEnrolled:{$elemmatch:{$eq : userId}}
                                   }) 
         if(!courseDetails)
         {
@@ -23,8 +23,8 @@ exports.createRating = async(req,res)=>{
             })
         }
         //check if user already reviewed or not
-        const alreadyReviewed = RatingAndReview.findOne({
-                               user:userID,
+        const alreadyReviewed = await RatingAndReview.findOne({
+                               user:userId,
                                course:courseId,
         })
         if(alreadyReviewed)
@@ -38,7 +38,7 @@ exports.createRating = async(req,res)=>{
         const ratingReview = await RatingAndReview.create({
                  rating,review,
                  course:courseId,
-                 user:userID,
+                 user:userId,
         })
         //update course with this rating and review
         const updatedCourseDetails = await Course.findOneAndUpdate(
@@ -75,7 +75,7 @@ exports.getAverageRating = async (req,res)=>{
         const result = await RatingAndReview.aggregate([
                     {
                         $match:{
-                            course:new mongoose.Schema.Types.ObjectId(courseId),
+                            course:new mongoose.Types.ObjectId(courseId),
                         },
 
                     },

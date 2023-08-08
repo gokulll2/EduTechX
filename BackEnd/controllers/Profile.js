@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Profile = require("../models/Profile");
+const { uploadImageToCloudinary } = require("../utils/imageUploader");
 
 exports.updatedProfile = async(req,res)=>{
     try{
@@ -23,7 +24,7 @@ exports.updatedProfile = async(req,res)=>{
         profileDetails.dateOfBirth = dateOfBirth;
         profileDetails.about = about;
         profileDetails.gender = gender;
-        profileDetaisl.contactNumber = contactNumber;
+        profileDetails.contactNumber = contactNumber;
         await profileDetails.save();
 
         //return res
@@ -83,13 +84,69 @@ exports.getAllUserDetails = async(req,res)=>{
         //return response
         return res.status(200).json({
             success:true,
-            message:"User data fetched successfully"
+            message:"User data fetched successfully",
+            data:userDetails,
         })
     } catch(error)
     {
         return res.status(500).json({
             success:false,
             message:"Failed in getting the User's details"
+        })
+    }
+}
+exports.updateDisplayPicture = async (req,res)=>{
+    try{
+        const displayPicture = req.files.displayPicture;
+        const userId = req.user.id;
+        const image = await uploadImageToCloudinary(
+            displayPicture,
+            process.env.FOLDER_NAME,
+            1000,
+            1000,
+        )
+        console.log(image);
+        const updatedProfile = await Profile.findByIdAndUpdate(
+            {_id:userId},
+            {image:image.secure_url},
+            {new:true},
+        )
+        res.send({
+            success:true,
+            message:`Image Updated Successfully`,
+            data:updatedProfile,
+        })
+    } catch(error)
+    {
+        return res.status(500).json({
+            success:false,
+            message:error.message,
+        })
+    }
+}
+exports.getEnrolledCourses = async (req,res)=>{
+    try{
+        const userId = req.user.id;
+        const userDetails = User.findOne({
+            _id:userId,
+        }).populate("courses")
+        .exec()
+        if(!userDetails)
+        {
+            return res.status(404).json({
+                success:false,
+                message:`Could not find user with id ${userDetails}`
+            })
+        }
+        return res.status(200).json({
+            success:true,
+            data:userDetails.courses,
+        })
+    } catch(err)
+    {
+        return res.status(500).json({
+            success:false,
+            message:err.message,
         })
     }
 }
