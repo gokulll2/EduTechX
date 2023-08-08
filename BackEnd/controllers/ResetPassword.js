@@ -2,6 +2,7 @@ const User = require("../models/User");
 // const jwt = require("jsonwebtoken");
 const mailSender = require("../utils/mailSender");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto")
 
 //resetPasswordToken
 exports.resetPasswordToken = async(req,res)=>{
@@ -18,7 +19,7 @@ exports.resetPasswordToken = async(req,res)=>{
             })
         }
         //generate token
-        const token = crypto.randomUUID();
+        const token = crypto.randomBytes(20).toString("hex")
         //Update user by adding token and expiration time
         const updatedDetails = await User.findOneAndUpdate(
                                 {email:email},
@@ -27,12 +28,13 @@ exports.resetPasswordToken = async(req,res)=>{
                                     resetPasswordExpires: Date.now() + 5*60*1000,
                                 },
                                 {new:true});
+        console.log("DETAILS",updatedDetails);
         //create URL
         const url = `http://localhost:3000/upadte-password/${token}`;
 
         //send mail containing that url
-        await mailSender(email,"Password Reset Link",
-        `Password Reset Link: ${url}`);
+        await mailSender(email,"Password Reset",
+        `Your Link for email verification is ${url}. Please click this url to reset your password.`);
         //Return response
         return res.status(200).json({
             success:true,
@@ -40,7 +42,7 @@ exports.resetPasswordToken = async(req,res)=>{
         })
     } catch(err)
     {
-        console.log(error);
+        console.log(err);
         return res.status(400).json({
             success:false,
             message:"Something went wrong while sending reset pwd mail",
@@ -71,7 +73,7 @@ exports.resetPassword = async(req,res)=>{
             })
         }
         //Token time check
-        if(userDetails.resetPasswordExpires < Date.now())
+        if(userDetails.resetPasswordExpires > Date.now())
         {
             return res.json({
                 success:false,
@@ -94,7 +96,7 @@ exports.resetPassword = async(req,res)=>{
         console.log(error);
         return res.status(500).json({
             success:false,
-            message:"Something went wrong while sending reset pwd mail"
+            message:"Something went wrong in updating the password"
         })
     }
 }
