@@ -31,7 +31,7 @@ exports.capturePayment = async (req,res)=>{
             }
             //user already pay for the same course
             const uid = new mongoose.Types.ObjectId(userID);
-         if(course.studentsEnrolled.includes.uid)
+         if(course.studentsEnrolled.includes(uid)) 
          {
             return res.status(400).json({
                 success:false,
@@ -65,7 +65,6 @@ exports.capturePayment = async (req,res)=>{
 
             return res.status(200).json({
                 success:true,
-                message:"",
                 courseName:course.courseName,
                 courseDescription:course.courseDescription,
                 thumbnail:course.thumbnail,
@@ -93,14 +92,14 @@ exports.verifySignature = async(req,res)=>{
    if(signature === digest)
    {
     console.log("Payment is Authorized")
-    const {courseId , userID} = req.body.payload.payment.entity.notes;
+    const {courseId , userId} = req.body.payload.payment.entity.notes;
     try{
         //fulfil the action
 
         //find the course and enroll the student in it
         const enrolledCourse = await Course.findOneAndUpdate(
                                 {_id:courseId},
-                                {$push:{studentsEnrolled:userID}},
+                                {$push:{studentsEnrolled:userId}},
                                 {new:true},
         )
         if(!enrolledCourse)
@@ -112,7 +111,7 @@ exports.verifySignature = async(req,res)=>{
         }
         //if found, find the student and add the course details in it
         const enrolledStudent = await User.findOneAndUpdate(
-                                {_id:userID},
+                                {_id:userId},
                                 {$push:{courses:courseId}},
                                 {new:true},
         )
@@ -139,8 +138,12 @@ exports.verifySignature = async(req,res)=>{
    }
    else{
      return res.status(400).json({
-
-     })
+        success:false,
+        message:"Invalid request",
+     });
    }
-}
+
+
+   
+};
 

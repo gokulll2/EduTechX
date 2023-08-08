@@ -269,8 +269,16 @@ exports.changepassword = async(req,res)=>{
         })
     }
     //return Response
-    
+    return res.status(200).json({
+        success:true,
+        message:"Password updated successfully",
+    })
     } catch(error){
-
+        //If there is an error updating the password , log the error and return a 500 (Internal Server Error)
+        return res.status(500).json({
+            success:false,
+            message:"Error occurred while updating password",
+            error:error.message,
+        })
     }
-}
+};
