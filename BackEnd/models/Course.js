@@ -30,19 +30,17 @@ const courseSchema = new mongoose.Schema({
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:"RatingAndReview",
-            required:true,
         }
     ],
     price:{
         type:Number,
-        required:true,
     },
     thumbnail:{
         type:String,
     },
     tag:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Tag",
+        type:[String],
+        required:true,
     },
     category:{
         type:mongoose.Schema.Types.ObjectId,
