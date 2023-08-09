@@ -65,7 +65,7 @@ exports.isInstructor = async (req,res,next)=>{
         {
             return res.status(401).json({
                 success:false,
-                message:"his is a protected route for Instructors only"
+                message:"This is a protected route for Instructors only"
             })
         }
         next();
@@ -84,7 +84,7 @@ exports.isAdmin = async (req,res,next)=>{
         {
             return res.status(401).json({
                 success:false,
-                message:"his is a protected route for Admins only"
+                message:"This is a protected route for Admins only"
             })
         }
         next();
