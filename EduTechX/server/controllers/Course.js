@@ -1,5 +1,5 @@
 const Course = require("../models/Course");
-const Category = require("../controllers/Category")
+const Category = require("../models/Category")
 const User = require("../models/User");
 const {uploadImageToCloudinary} = require("../utils/imageUploader");
 require("dotenv").config(); 
@@ -166,7 +166,7 @@ exports.getCourseDetails = async (req,res)=>{
             }
           )
           .populate("category")
-          .populate("ratingAndreviews")
+          //.populate("ratingAndreviews")
           .populate({
             path:"courseContent",
             populate:{
@@ -182,7 +182,7 @@ exports.getCourseDetails = async (req,res)=>{
                 message:`Could not find the course with thw ${courseId}`,
             })
           }
-          return res.tatus(200).json({
+          return res.status(200).json({
             success:true,
             message:"Course details fetched successfully",
             data:courseDetails,

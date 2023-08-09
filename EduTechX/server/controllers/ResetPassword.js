@@ -63,7 +63,7 @@ exports.resetPassword = async(req,res)=>{
             })
         }
         //get Userdetails from db using token
-        const userDetails = await User.findOne({token:token});
+        const userDetails = await User.findOne({ token:token });
         //if no entry - Ivalid Token
         if(!userDetails)
         {

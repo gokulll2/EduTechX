@@ -35,18 +35,18 @@ router.post("/addSubSection" ,auth , isInstructor , createSubSection);
 router.post("/updateSubSection" , auth , isInstructor , updateSubSection);
 router.post("/deleteSubSection" , auth , isInstructor , deleteSubSection);
 router.get("/getAllCourses",getAllCourses);
-
+router.post("/getCourseDetails", getCourseDetails)
 // ***************************Category Routes ******************
 //Category can only be handled by Admin
 
 router.post("/createCategory",auth , isAdmin , createCategory);
-router.post("/showAllCategories" ,auth , isAdmin , showAllCategories);
-router.post("/getCategoryDetails" , auth ,isAdmin , categoryPageDetails)
+router.get("/showAllCategories" ,auth , isAdmin , showAllCategories);
+router.get("/getCategoryDetails" , auth ,isAdmin , categoryPageDetails)
 
 //****************************Rating And Reviews******************* */
 //Handled By Student
 router.post("/createRating" , auth , isStudent , createRating);
-router.post("/getAverageRating" , getAverageRating);
-router.post("/getReviews" , getAllRating);
+router.get("/getAverageRating" , getAverageRating);
+router.get("/getReviews" , getAllRating);
 
 module.exports = router;

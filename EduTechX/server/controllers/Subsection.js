@@ -20,7 +20,7 @@ exports.createSubSection = async(req,res)=>{
             })
         }
         const supportedTypes= ['mp4','mov'];
-        const fileType = video.name.split('.')[1].toLowerCase();
+        const fileType = video.name.split('.')[1].toUpperCase();
         if(!isSupportedtypes(supportedTypes,fileType))
         {
             return res.status(400).json({

@@ -32,7 +32,7 @@ exports.createSection = async (req,res) =>{
                                 })
                                 .exec();
         //Return Response
-        return res.status(200).jsoN({
+        return res.status(200).json({
             success:true,
             message:"New section Added Successfully",
             updatedCourseDetails,
@@ -80,10 +80,13 @@ exports.updateSection = async (req,res)=>{
 exports.deleteSection = async (req,res)=>{
     try{
         //get ID - assuming that we are sending ID in params
-        const {sectionId} = req.params
+        const {sectionId} = req.body
         //Use find id and delete
         await Section.findByIdAndDelete(sectionId);
         //TODO : do we need to delete the entry from course schema too?
+        await Course.findByIdAndUpdate({
+            
+        })
         //return res
         return res.status(200).json({
             success:true,
