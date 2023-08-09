@@ -20,6 +20,14 @@ const userSchema = new mongoose.schema({
     type: String,
     required: true,
   },
+  active: {
+    type: Boolean,
+    default: true,
+  },
+  approved: {
+    type: Boolean,
+    default: true,
+  },
   token: {
     type: String,
   },
@@ -52,6 +60,9 @@ const userSchema = new mongoose.schema({
       ref: "CourseProgress",
     },
   ],
-});
+},
+		// Add timestamps for when the document is created and last modified
+    {timestamps:true},
+);
 
 module.exports = mongoose.model("User", userSchema);
