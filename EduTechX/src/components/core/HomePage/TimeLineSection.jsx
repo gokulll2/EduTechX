@@ -5,23 +5,23 @@ import Logo3 from "../../../assets/TimeLineLogo/Logo3.svg"
 import Logo4 from "../../../assets/TimeLineLogo/Logo4.svg"
 import timelineImage from "../../../assets/Images/TimelineImage.png"
 const timeline = [{
-    logo:Logo1,
+    Logo:Logo1,
     heading:"Leadership",
     Description:"Fully committed to the success company",
 
 },
 {
-    logo:Logo2,
+    Logo:Logo2,
     heading:"Responsibility",
     Description:"Students will always be our first priority",
 
 },{
-    logo:Logo3,
+    Logo:Logo3,
     heading:"Flexibility",
     Description:"The ability to switch is an important skills",
 
 },{
-    logo:Logo4,
+    Logo:Logo4,
     heading:"Solve the problem",
     Description:"Code your way to a solution",
 
