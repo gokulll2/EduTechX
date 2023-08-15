@@ -8,6 +8,7 @@ import CodeBlock from "../components/core/HomePage/CodeBlock"
 import { LearningLanguageSection } from '../components/core/HomePage/LearningLanguageSection'
 import { TimeLineSection } from '../components/core/HomePage/TimeLineSection'
 import { Footer } from '../components/common/Footer'
+import { ExploreMore } from '../components/core/HomePage/ExploreMore'
 
 const Home = () => {
   return (
