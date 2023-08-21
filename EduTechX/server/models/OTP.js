@@ -27,7 +27,7 @@ async function sendVerificationEmail(email,otp){
     //Send the email
     try{
         const mailResponse = await mailSender(email , "Verification Email from EduTechX" , otp);
-        console.log("Email Sent Successfully: ",mailResponse.response)
+        console.log("Email Sent Successfully: ")
     } catch(error){
         console.log("Error Occurred while sending mails:",error);
         throw error;

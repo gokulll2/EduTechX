@@ -35,7 +35,7 @@ exports.capturePayment = async (req,res)=>{
          {
             return res.status(400).json({
                 success:false,
-                message:"Student already regeistered",
+                message:"Student already registered",
             })
          } 
          } catch(error)
