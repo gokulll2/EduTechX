@@ -56,6 +56,7 @@ export function signUp(
     const toastId = toast.loading("Loading...")
     dispatch(setLoading(true))
     try {
+      console.log(SIGNUP_API)
       const response = await apiConnector("POST", SIGNUP_API, {
         accountType,
         firstName,
