@@ -1,25 +1,56 @@
-const nodemailer = require("nodemailer");
-require("dotenv").config();
-const mailSender = async (email,title,body)=>{
-    try{
-        let transporter = nodemailer.createTransport({
-            host:process.env.MAIL_HOST,
-            auth:{
-                user:process.env.MAIL_USER,
-                pass:process.env.MAIL_PASS,
-            }
-        })
-        let info = await transporter.sendMail({
-            from: 'EduTechX Experts',
-            to:`${email}`,
-            subject:`${title}`,
-            html:`${body}`,
-        })
-        console.log(info);
-        return info;
+// const nodemailer = require("nodemailer");
+// require("dotenv").config();
+// const mailSender = async (email,title,body)=>{
+//     // console.log(process.env);
+//     try{
+//         // console.log("GOKUL")
+//         let transporter = nodemailer.createTransport({
+//             service:process.env.MAIL_HOST,
+//             auth:{
+//                 user:process.env.MAIL_USER,
+//                 pass:process.env.MAIL_PASS,
+//             },
+//             secure:true,
+//         })
+//         let info = await transporter.sendMail({
+//             from: `"EduTechX Experts " <${process.env.MAIL_USER}>`,
+//             to:`${email}`,
+//             subject:`${title}`,
+//             html:`${body}`,
+//         })
+//         console.log("HIMANSHU")
+//         // console.log(info);
+//         return info;
 
-    } catch(error){
-        console.log(error.message);
-    }
+//     } catch(error){
+//         console.log(error.message);
+//     }
+// }
+// module.exports = mailSender;
+const nodemailer = require("nodemailer");
+const mailSender = async (email, title, body) => {
+	try {
+		let transporter = nodemailer.createTransport({
+			host: process.env.MAIL_HOST,
+			auth: {
+				user: process.env.MAIL_USER,
+				pass: process.env.MAIL_PASS,
+			},
+			secure: false,
+		})
+
+		let info = await transporter.sendMail({
+			from: `"EduTechX Experts " <${process.env.MAIL_USER}>`, // sender address
+			to: `${email}`, // list of receivers
+			subject: `${title}`, // Subject line
+			html: `${body}`, // html body
+		})
+		console.log(info.response)
+		return info
+	} catch (error) {
+		console.log(error.message)
+		return error.message
+	}
 }
+
 module.exports = mailSender;

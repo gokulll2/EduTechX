@@ -97,10 +97,10 @@ exports.signup = async(req,res)=>{
             })
         }
         //find most recent OTP stored for the user
-        const recentOtp = await OTP.find({email}).sort({createdAt:-1}).limit(1); 
-        console.log(recentOtp);
+        const response = await OTP.find({email}).sort({createdAt:-1}).limit(1); 
+        console.log(response);
         //validate otp
-        if(recentOtp.length==0)
+        if(response.length==0)
         {
             //otp not found
             return  res.status(400).json({
@@ -108,7 +108,7 @@ exports.signup = async(req,res)=>{
                 message:"OTP not found",
             })
         }
-        else if(otp !== recentOtp[0].otp)
+        else if(otp !== response[0].otp)
         {
             //Invalid OTP
             return res.status(400).json({
@@ -127,7 +127,7 @@ exports.signup = async(req,res)=>{
             dateOfBirth:null,
             about:null,
             contactNumber:null,
-        })
+        }) 
         const user = User.create({
             firstName,
             lastName,
