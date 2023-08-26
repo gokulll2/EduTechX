@@ -9,7 +9,11 @@ import ForgotPassword from "./pages/ForgotPassword";
 import UpdatePassword from "./pages/UpdatePassword";
 import VerifyEmail from "./pages/VerifyEmail";
 import About from "./pages/About";
-import { Contact } from "./pages/Contact";
+import Contact from "./pages/Contact";
+import Dashboard from "./pages/Dashboard";
+import MyProfile from "./components/core/Dashboard/MyProfile";
+import PrivateRoute from "./components/core/Auth/PrivateRoute";
+import Error from "./pages/Error";
 function App() {
   return (
     <div className="w-screen min-h-screen bg-richblack-900 flex flex-col font-inter">
@@ -63,10 +67,23 @@ function App() {
               <About />
             </OpenRoute>
           }
-        />  
+        /> 
+         
         <Route path="/contact"element={<Contact />}/>
-        <Route path="dashboard/my-profile"
+        <Route 
+      element={
+        <PrivateRoute>
+          <Dashboard />
+        </PrivateRoute>
+      }
+    >
+      <Route path="dashboard/my-profile"element={<MyProfile />}/>
+    </Route>
+
+
+        <Route path="*" element={<Error />} />
     </Routes>
+
    </div>
   );
 }
