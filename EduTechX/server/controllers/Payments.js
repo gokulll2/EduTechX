@@ -139,11 +139,12 @@ try{
             {new:true},
         )
         //send confirmation mail to the student too
-        const emailResponse =await mailSender(
+        const emailResponse = await mailSender(
             enrollStudents.email,
             `Successfully enrolled into ${enrolledCourses.courseName}`,
             courseEnrollmentEmail(enrolledCourses.courseName , `${enrolledStudent.firstName}`)
         )
+        console.log("Email sent successfully",emailResponse.response);
     }
 } catch(error){
     console.log(error);
