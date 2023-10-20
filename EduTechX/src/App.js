@@ -23,7 +23,7 @@ import AddCourse from "./components/core/Dashboard/AddCourse";
 import MyCourses from "./components/core/Dashboard/MyCourses";
 import EditCourse from "./components/core/Dashboard/EditCourse";
 import Catalog from "./pages/Catalog";
-import { CourseDetails } from "./pages/CourseDetails";
+import CourseDetails  from "./pages/CourseDetails";
 function App() {
 
   const dispatch = useDispatch();

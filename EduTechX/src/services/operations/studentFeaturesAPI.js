@@ -2,8 +2,8 @@ import { toast } from "react-hot-toast";
 import { studentEndpoints } from "../apis";
 import { apiConnector } from "../apiconnector";
 import rzpLogo from "../../assets/Logo/rzp_logo.png"
-import { setPaymentLoading } from "../../slices/courseSlice";
-import { resetCart } from "../../slices/cartSlice";
+import { setPaymentLoading } from "../../slice/courseSlice";
+import { resetCart } from "../../slice/cartSlice";
 
 
 const {COURSE_PAYMENT_API, COURSE_VERIFY_API, SEND_PAYMENT_SUCCESS_EMAIL_API} = studentEndpoints;
@@ -64,7 +64,7 @@ export async function buyCourse(token, courses, userDetails, navigate, dispatch)
                 verifyPayment({...response, courses}, token, navigate, dispatch);
             }
         }
-        //miss hogya tha 
+
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
         paymentObject.on("payment.failed", function(response) {
@@ -74,7 +74,7 @@ export async function buyCourse(token, courses, userDetails, navigate, dispatch)
 
     }
     catch(error) {
-        console.log("PAYMENT API ERROR.....", error);
+        console.log("PAYMENT API ERkROR.....", error);
         toast.error("Could not make Payment");
     }
     toast.dismiss(toastId);
