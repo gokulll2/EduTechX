@@ -5,7 +5,8 @@ const User = require("../models/User");
 const mailSender = require("../utils/mailSender")
 require("dotenv").config();
 const crypto = require("crypto")
-const courseEnrollmentEmail = require("../mail/templates/courseEnrollmentEmail")
+const courseEnrollmentEmail = require("../mail/templates/courseEnrollmentEmail");
+const CourseProgress = require("../models/CourseProgress");
 
 //capture the payment and inititate the razorpay order
 exports.capturePayment = async (req,res)=>{
@@ -128,10 +129,15 @@ try{
         if(!enrolledCourses)
         {
             return res.status(500).json({
-                success:false,
+                success:false, 
                 message:"Error finding the course"
             })
         }
+        const courseProgress = await CourseProgress.create({
+            courseID:courseId,
+            userId:userId,
+            completedVideos:[],
+        })
         //find the student and add this course into their courses list
         const enrolledStudent = await User.findByIdAndUpdate(
             userId,
