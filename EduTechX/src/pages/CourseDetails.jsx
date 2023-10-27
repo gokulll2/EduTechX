@@ -10,7 +10,7 @@ import ConfirmationModal from "../components/common/ConfirmationModal"
 import RatingStars from "../components/common/RatingStars"
 import { formatDate } from '../services/formatDate';
 
-import CourseDetailsCard from '../components/core/Course/CourseDetailsCard';
+import {CourseDetailsCard} from '../components/core/Course/CourseDetailsCard';
 
 const CourseDetails = () => {
 
