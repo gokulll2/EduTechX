@@ -26,6 +26,7 @@ import Catalog from "./pages/Catalog";
 import CourseDetails  from "./pages/CourseDetails";
 import VideoDetails from "./components/core/ViewCourse/VideoDetails";
 import ViewCourse from "./pages/ViewCourse";
+import Instructor from "./components/core/Dashboard/InstructorDashboard/Instructor";
 function App() {
 
   const dispatch = useDispatch();
@@ -112,6 +113,7 @@ function App() {
       {
         user?.accountType === ACCOUNT_TYPE.INSTRUCTOR  && (
           <>
+          <Route path="dashboard/instructor" element={<Instructor />} />
           <Route path="dashboard/add-course" element={<AddCourse />} /> 
           <Route path="dashboard/my-courses" element={<MyCourses />} />
           <Route path="dashboard/edit-course/:courseId" element={<EditCourse />} />
