@@ -1,8 +1,8 @@
 import React from 'react'
-import {Chart , registrables} from "chart.js"
+import {Chart , registerables} from "chart.js"
 import {Pie} from "react-chartjs-2"
 
-Chart.register(...registrables);
+Chart.register(...registerables);
 
 export const InstructorChart = ({props}) => {
     const courses = props.courses;
@@ -47,7 +47,7 @@ export const InstructorChart = ({props}) => {
       <div className="space-x-4 font-semibold">
         {/* Button to switch to the "students" chart */}
         <button
-          onClick={() => setCurrChart("students")}
+          onClick={() => setcurrChart("students")}
           className={`rounded-sm p-1 px-3 transition-all duration-200 ${
             currChart === "students"
               ? "bg-richblack-700 text-yellow-50"
@@ -58,7 +58,7 @@ export const InstructorChart = ({props}) => {
         </button>
         {/* Button to switch to the "income" chart */}
         <button
-          onClick={() => setCurrChart("income")}
+          onClick={() => setcurrChart("income")}
           className={`rounded-sm p-1 px-3 transition-all duration-200 ${
             currChart === "income"
               ? "bg-richblack-700 text-yellow-50"
@@ -71,7 +71,7 @@ export const InstructorChart = ({props}) => {
       <div className="relative mx-auto aspect-square h-full w-full">
         {/* Render the Pie chart based on the selected chart */}
         <Pie
-          data={currChart === "students" ? chartDataStudents : chartIncomeData}
+          data={currChart === "students" ? chartDataforStudents : chartDataforIncome}
           options={options}
         />
       </div>
